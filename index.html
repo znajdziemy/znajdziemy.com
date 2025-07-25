@@ -1,0 +1,1173 @@
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('block');
+        }
+
+        // Form submission
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!terms) {
+                alert('Proszę zaakceptować regulamin i politykę prywatności');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Hasła nie są identyczne');
+                return;
+            }
+            
+            // Here you would normally send the data to your backend
+            console.log('Registration attempt:', { name, email, password });
+            
+            // For demo purposes, just show an alert
+            alert('Rejestracja udana! (to tylko demonstracja)');
+            window.location.href = 'index.html';
+        });
+    </script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("searchButton");
+    const input = document.getElementById("searchInput");
+    const results = document.getElementById("results");
+
+    if (!button || !input || !results) return;
+
+    button.addEventListener("click", async () => {
+        const query = input.value.trim();
+        if (!query) return;
+        results.innerHTML = "⏳ Szukam...";
+        try {
+            const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            if (!data.results || data.results.length === 0) {
+                results.innerHTML = "Brak wyników.";
+                return;
+            }
+            results.innerHTML = data.results.map(item => 
+                `<div class='result-item'>
+                    <a href='${item.link}' target='_blank'><strong>${item.title}</strong></a><br>${item.price}
+                </div>`
+            ).join("<hr>");
+        } catch (err) {
+            results.innerHTML = "❌ Wystąpił błąd podczas wyszukiwania.";
+            console.error(err);
+        }
+    });
+});
+</script>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Znajdziemy.com - Z nami zakupy będą jeszcze prostsze</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #10b981 100%);
+        }
+        .price-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .search-input {
+            transition: all 0.3s ease;
+        }
+        .search-input:focus {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+        }
+    </style>
+</head>
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-search text-indigo-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">Znajdziemy.com</span>
+                    </div>
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+                    <a href="#features" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Funkcje</a>
+                    <a href="#pricing" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Cennik</a>
+                    <a href="#how-it-works" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Jak to działa?</a>
+                    <a href="login.html" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-md text-sm font-medium">Zaloguj się</a>
+                    <button onclick="openModal('register-modal')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">Zarejestruj się</button>
+                </div>
+                <div class="-mr-2 flex items-center sm:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden sm:hidden" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="#features" class="text-gray-500 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Funkcje</a>
+                <a href="#pricing" class="text-gray-500 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Cennik</a>
+                <a href="#how-it-works" class="text-gray-500 hover:text-gray-700 block px-3 py-2 rounded-md text-base font-medium">Jak to działa?</a>
+                <a href="login.html" class="w-full text-left bg-gray-100 hover:bg-gray-200 text-gray-800 block px-3 py-2 rounded-md text-base font-medium">Zaloguj się</a>
+                <button onclick="openModal('register-modal')" class="w-full text-left bg-indigo-600 hover:bg-indigo-700 text-white block px-3 py-2 rounded-md text-base font-medium">Zarejestruj się</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-gradient text-white">
+        <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl mb-4">
+                    Z nami zakupy będą jeszcze prostsze
+                </h1>
+                <p class="max-w-xl mx-auto text-xl text-indigo-100">
+                    Sprawdź i się przekonaj
+                </p>
+                <div class="mt-10 flex justify-center">
+                    <div class="w-full max-w-md">
+                        <div class="relative rounded-md shadow-sm">
+                            <input type="text" id="search" class="search-input block w-full p-4 rounded-md border-0 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500" placeholder="Czego szukasz?">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium h-full">
+                                    Sprawdź ofertę
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-center space-x-4">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white bg-opacity-10 text-indigo-100">
+                        <i class="fas fa-check-circle mr-1"></i> Allegro
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white bg-opacity-10 text-indigo-100">
+                        <i class="fas fa-check-circle mr-1"></i> OLX
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white bg-opacity-10 text-indigo-100">
+                        <i class="fas fa-check-circle mr-1"></i> Ceneo
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white bg-opacity-10 text-indigo-100">
+                        <i class="fas fa-check-circle mr-1"></i> Temu
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Funkcje</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Dlaczego warto wybrać naszą usługę?
+                </p>
+            </div>
+
+            <div class="mt-10">
+                <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-bolt text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Szybkie wyszukiwanie</h3>
+                        <p class="text-gray-500">
+                            Otrzymuj wyniki z wielu platform w ciągu kilku sekund. Oszczędzaj czas i znajdź najlepsze oferty.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-chart-line text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Porównanie cen</h3>
+                        <p class="text-gray-500">
+                            Zobacz oferty z różnych sklepów w jednym miejscu i wybierz najkorzystniejszą cenę.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-bell text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Powiadomienia</h3>
+                        <p class="text-gray-500">
+                            Ustaw alerty cenowe i otrzymuj powiadomienia, gdy cena produktu spadnie.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-filter text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Zaawansowane filtry</h3>
+                        <p class="text-gray-500">
+                            Dokładnie określ parametry wyszukiwania, aby znaleźć dokładnie to, czego potrzebujesz.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-history text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Historia wyszukiwań</h3>
+                        <p class="text-gray-500">
+                            Wracaj do swoich poprzednich wyszukiwań i śledź zmiany cen w czasie.
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-lg p-6">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                            <i class="fas fa-mobile-alt text-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-2">Dostępność mobilna</h3>
+                        <p class="text-gray-500">
+                            Korzystaj z naszej usługi na każdym urządzeniu, gdziekolwiek jesteś.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div id="how-it-works" class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Jak to działa?</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Proste kroki do znalezienia najlepszych ofert
+                </p>
+            </div>
+
+            <div class="mt-10">
+                <div class="relative">
+                    <div class="hidden lg:block absolute top-0 left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-indigo-200"></div>
+                    
+                    <div class="space-y-10 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-x-8">
+                        <!-- Step 1 -->
+                        <div class="relative group">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white lg:mx-auto">
+                                <span class="text-xl font-bold">1</span>
+                            </div>
+                            <div class="mt-5 lg:mt-8 lg:text-center">
+                                <h3 class="text-lg font-medium text-gray-900">Zarejestruj się</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Załóż konto i wybierz odpowiedni pakiet dostępu do naszej usługi.
+                                </p>
+                            </div>
+                            <div class="lg:hidden absolute top-12 left-6 h-full w-0.5 bg-indigo-200 -z-10"></div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="relative group">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white lg:mx-auto">
+                                <span class="text-xl font-bold">2</span>
+                            </div>
+                            <div class="mt-5 lg:mt-8 lg:text-center">
+                                <h3 class="text-lg font-medium text-gray-900">Wyszukaj produkt</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Wpisz nazwę produktu, który Cię interesuje i zastosuj filtry.
+                                </p>
+                            </div>
+                            <div class="lg:hidden absolute top-12 left-6 h-full w-0.5 bg-indigo-200 -z-10"></div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="relative group">
+                            <div class="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white lg:mx-auto">
+                                <span class="text-xl font-bold">3</span>
+                            </div>
+                            <div class="mt-5 lg:mt-8 lg:text-center">
+                                <h3 class="text-lg font-medium text-gray-900">Otrzymaj wyniki</h3>
+                                <p class="mt-2 text-gray-500">
+                                    Porównaj oferty z różnych platform i wybierz najlepszą dla siebie.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Section -->
+    <div id="pricing" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">Cennik</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Wybierz pakiet dostosowany do Twoich potrzeb
+                </p>
+            </div>
+
+            <div class="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- MINI Plan -->
+                <div class="price-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+                    <div class="px-6 py-8">
+                        <h3 class="text-lg font-medium text-gray-900">MINI</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-extrabold text-gray-900">14,99</span>
+                            <span class="ml-1 text-xl font-semibold text-gray-500">PLN</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">10 wyszukiwań</p>
+                        <p class="mt-1 text-sm text-gray-500">ważne 1 miesiąc</p>
+                    </div>
+                    <div class="px-6 pt-0 pb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Dostęp do Allegro i OLX</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Podstawowe filtry</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-gray-400">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-500">Powiadomienia cenowe</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-gray-400">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-500">Historia wyszukiwań</p>
+                            </li>
+                        </ul>
+                        <div class="mt-8">
+                            <button onclick="openModal('register-modal')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Wybierz plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STANDARD Plan -->
+                <div class="price-card bg-white border-2 border-indigo-500 rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+                    <div class="px-6 py-8">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-lg font-medium text-gray-900">STANDARD</h3>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">Popularny</span>
+                        </div>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-extrabold text-gray-900">19,99</span>
+                            <span class="ml-1 text-xl font-semibold text-gray-500">PLN</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">20 wyszukiwań</p>
+                        <p class="mt-1 text-sm text-gray-500">ważne 1 miesiąc</p>
+                    </div>
+                    <div class="px-6 pt-0 pb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Dostęp do Allegro, OLX i Ceneo</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Zaawansowane filtry</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Powiadomienia cenowe</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-gray-400">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-500">Historia wyszukiwań</p>
+                            </li>
+                        </ul>
+                        <div class="mt-8">
+                            <button onclick="openModal('register-modal')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Wybierz plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PREMIUM Plan -->
+                <div class="price-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+                    <div class="px-6 py-8">
+                        <h3 class="text-lg font-medium text-gray-900">PREMIUM</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-extrabold text-gray-900">49,99</span>
+                            <span class="ml-1 text-xl font-semibold text-gray-500">PLN</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">100 wyszukiwań</p>
+                        <p class="mt-1 text-sm text-gray-500">ważne 6 miesięcy</p>
+                    </div>
+                    <div class="px-6 pt-0 pb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Dostęp do wszystkich platform</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Zaawansowane filtry</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Powiadomienia cenowe</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Historia wyszukiwań (30 dni)</p>
+                            </li>
+                        </ul>
+                        <div class="mt-8">
+                            <button onclick="openModal('register-modal')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Wybierz plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAX Plan -->
+                <div class="price-card bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden transition-all duration-300">
+                    <div class="px-6 py-8">
+                        <h3 class="text-lg font-medium text-gray-900">MAX</h3>
+                        <div class="mt-4 flex items-baseline">
+                            <span class="text-4xl font-extrabold text-gray-900">59,99</span>
+                            <span class="ml-1 text-xl font-semibold text-gray-500">PLN</span>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">200 wyszukiwań</p>
+                        <p class="mt-1 text-sm text-gray-500">ważne 6 miesięcy</p>
+                    </div>
+                    <div class="px-6 pt-0 pb-8">
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Dostęp do wszystkich platform</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Zaawansowane filtry</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Powiadomienia cenowe</p>
+                            </li>
+                            <li class="flex items-start">
+                                <div class="flex-shrink-0 h-5 w-5 text-green-500">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <p class="ml-3 text-sm text-gray-700">Pełna historia wyszukiwań</p>
+                            </li>
+                        </ul>
+                        <div class="mt-8">
+                            <button onclick="openModal('register-modal')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                Wybierz plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="py-12 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="lg:text-center">
+                <h2 class="text-base text-indigo-600 font-semibold tracking-wide uppercase">FAQ</h2>
+                <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                    Najczęściej zadawane pytania
+                </p>
+            </div>
+
+            <div class="mt-10">
+                <div class="space-y-4">
+                    <div class="bg-white shadow overflow-hidden rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Jak działa wyszukiwarka?</h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>Nasza wyszukiwarka korzysta z oficjalnych API platform takich jak Allegro, OLX, Ceneo i innych, aby zbierać i prezentować oferty w jednym miejscu. Wystarczy wpisać nazwę produktu, a my znajdziemy dla Ciebie najlepsze oferty.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow overflow-hidden rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Czy mogę przetestować usługę przed zakupem?</h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>Tak, oferujemy darmowe konto testowe z ograniczoną liczbą wyszukiwań. Po wyczerpaniu limitu będziesz musiał wybrać jeden z naszych płatnych pakietów.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow overflow-hidden rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Jak mogę płacić za usługę?</h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>Akceptujemy płatności kartą kredytową/debetową, przelewami bankowymi oraz przez systemy płatności online takie jak PayPal, Przelewy24 i BLIK.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white shadow overflow-hidden rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Czy mogę zmienić pakiet w trakcie trwania subskrypcji?</h3>
+                            <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                <p>Tak, możesz w każdej chwili przejść na wyższy pakiet. Różnica w cenie zostanie przeliczona proporcjonalnie do pozostałego czasu subskrypcji.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="bg-indigo-700">
+        <div class="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-extrabold text-white sm:text-4xl">
+                <span class="block">Gotowy na łatwiejsze zakupy?</span>
+                <span class="block">Zarejestruj się już dziś.</span>
+            </h2>
+            <p class="mt-4 text-lg leading-6 text-indigo-200">
+                Dołącz do tysięcy zadowolonych klientów, którzy oszczędzają czas i pieniądze dzięki naszej usłudze.
+            </p>
+            <button onclick="openModal('register-modal')" class="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 sm:w-auto">
+                Zacznij teraz
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">O nas</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Firma</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Zespół</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Kariera</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Blog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Pomoc</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Centrum pomocy</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Kontakt</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Status usługi</a></li>
+                        <li><a href="privacy.html" class="text-base text-gray-300 hover:text-white">Polityka prywatności</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Platformy</h3>
+                    <ul class="mt-4 space-y-4">
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Allegro</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">OLX</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Ceneo</a></li>
+                        <li><a href="#" class="text-base text-gray-300 hover:text-white">Temu</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Śledź nas</h3>
+                    <div class="mt-4 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                    </div>
+                    <div class="mt-6">
+                        <h3 class="text-sm font-semibold text-gray-400 tracking-wider uppercase">Pobierz aplikację</h3>
+                        <div class="mt-4 flex space-x-4">
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <i class="fab fa-apple text-3xl"></i>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white">
+                                <i class="fab fa-google-play text-3xl"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-12 border-t border-gray-700 pt-8">
+                <p class="text-base text-gray-400 text-center">
+                    &copy; 2025 Znajdziemy.com. Wszelkie prawa zastrzeżone.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <div>
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100">
+                        <i class="fas fa-user text-indigo-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Zaloguj się</h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">Wprowadź swoje dane logowania, aby uzyskać dostęp do konta.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-6">
+                    <form>
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700">Adres email</label>
+                            <div class="mt-1">
+                                <input type="email" name="email" id="email" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="twoj@email.com">
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <label for="password" class="block text-sm font-medium text-gray-700">Hasło</label>
+                            <div class="mt-1">
+                                <input type="password" name="password" id="password" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                <label for="remember-me" class="ml-2 block text-sm text-gray-700">Zapamiętaj mnie</label>
+                            </div>
+                            <div class="text-sm">
+                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Zapomniałeś hasła?</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                        Zaloguj się
+                    </button>
+                    <button type="button" onclick="closeModal('login-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                        Anuluj
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">
+                        Nie masz jeszcze konta? 
+                        <a href="#" onclick="closeModal('login-modal'); openModal('register-modal')" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            Zarejestruj się
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <div>
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-indigo-100">
+                        <i class="fas fa-user-plus text-indigo-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Zarejestruj się</h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">Wypełnij formularz, aby założyć nowe konto.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-6">
+                    <form>
+                        <div class="grid grid-cols-1 gap-y-4">
+                            <div>
+                                <label for="reg-email" class="block text-sm font-medium text-gray-700">Adres email</label>
+                                <div class="mt-1">
+                                    <input type="email" name="reg-email" id="reg-email" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="twoj@email.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="reg-password" class="block text-sm font-medium text-gray-700">Hasło</label>
+                                <div class="mt-1">
+                                    <input type="password" name="reg-password" id="reg-password" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="reg-confirm-password" class="block text-sm font-medium text-gray-700">Potwierdź hasło</label>
+                                <div class="mt-1">
+                                    <input type="password" name="reg-confirm-password" id="reg-confirm-password" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="••••••••">
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <label class="block text-sm font-medium text-gray-700">Wybierz pakiet</label>
+                                <div class="mt-1 grid grid-cols-1 gap-2">
+                                    <div class="flex items-center">
+                                        <input id="mini-plan" name="plan" type="radio" checked class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="mini-plan" class="ml-2 block text-sm text-gray-700">
+                                            <span class="font-medium">MINI</span> - 10 wyszukiwań (14,99 PLN/miesiąc)
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="standard-plan" name="plan" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="standard-plan" class="ml-2 block text-sm text-gray-700">
+                                            <span class="font-medium">STANDARD</span> - 20 wyszukiwań (19,99 PLN/miesiąc)
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="premium-plan" name="plan" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="premium-plan" class="ml-2 block text-sm text-gray-700">
+                                            <span class="font-medium">PREMIUM</span> - 100 wyszukiwań (49,99 PLN/6 miesięcy)
+                                        </label>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <input id="max-plan" name="plan" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                        <label for="max-plan" class="ml-2 block text-sm text-gray-700">
+                                            <span class="font-medium">MAX</span> - 200 wyszukiwań (59,99 PLN/6 miesięcy)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-start mt-2">
+                                <div class="flex items-center h-5">
+                                    <input id="terms" name="terms" type="checkbox" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="terms" class="font-medium text-gray-700">Akceptuję <a href="#" class="text-indigo-600 hover:text-indigo-500">warunki korzystania z usługi</a> i <a href="#" class="text-indigo-600 hover:text-indigo-500">politykę prywatności</a></label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                        Zarejestruj się i zapłać
+                    </button>
+                    <button type="button" onclick="closeModal('register-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                        Anuluj
+                    </button>
+                </div>
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-600">
+                        Masz już konto? 
+                        <a href="#" onclick="closeModal('register-modal'); openModal('login-modal')" class="font-medium text-indigo-600 hover:text-indigo-500">
+                            Zaloguj się
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
+                <div>
+                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                        <i class="fas fa-credit-card text-green-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-5">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Wybierz metodę płatności</h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">Zakończ rejestrację, wybierając wygodną dla Ciebie metodę płatności.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-6">
+                    <div class="grid grid-cols-1 gap-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 cursor-pointer">
+                            <div class="flex items-center">
+                                <input id="credit-card" name="payment-method" type="radio" checked class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="credit-card" class="ml-3 block text-sm font-medium text-gray-700">
+                                    Karta kredytowa/debetowa
+                                </label>
+                            </div>
+                            <div class="mt-3 grid grid-cols-1 gap-y-4" id="credit-card-fields">
+                                <div>
+                                    <label for="card-number" class="block text-sm font-medium text-gray-700">Numer karty</label>
+                                    <div class="mt-1">
+                                        <input type="text" name="card-number" id="card-number" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="1234 5678 9012 3456">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-x-4">
+                                    <div>
+                                        <label for="expiry-date" class="block text-sm font-medium text-gray-700">Data ważności</label>
+                                        <div class="mt-1">
+                                            <input type="text" name="expiry-date" id="expiry-date" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="MM/RR">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="cvv" class="block text-sm font-medium text-gray-700">CVV</label>
+                                        <div class="mt-1">
+                                            <input type="text" name="cvv" id="cvv" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border" placeholder="123">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 cursor-pointer">
+                            <div class="flex items-center">
+                                <input id="paypal" name="payment-method" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="paypal" class="ml-3 block text-sm font-medium text-gray-700">
+                                    PayPal
+                                </label>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 cursor-pointer">
+                            <div class="flex items-center">
+                                <input id="blik" name="payment-method" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="blik" class="ml-3 block text-sm font-medium text-gray-700">
+                                    BLIK
+                                </label>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-indigo-500 cursor-pointer">
+                            <div class="flex items-center">
+                                <input id="transfer" name="payment-method" type="radio" class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300">
+                                <label for="transfer" class="ml-3 block text-sm font-medium text-gray-700">
+                                    Przelew bankowy
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm">
+                        Zapłać i zarejestruj
+                    </button>
+                    <button type="button" onclick="closeModal('payment-modal')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm">
+                        Anuluj
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('block');
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('fixed') && event.target.classList.contains('inset-0')) {
+                const modals = document.querySelectorAll('.fixed.inset-0');
+                modals.forEach(modal => {
+                    if (!modal.classList.contains('hidden')) {
+                        const modalId = modal.parentElement.id;
+                        closeModal(modalId);
+                    }
+                });
+            }
+        }
+
+        // Payment method selection
+        document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Hide all payment fields
+                document.querySelectorAll('[id$="-fields"]').forEach(field => {
+                    field.classList.add('hidden');
+                });
+                
+                // Show selected payment fields
+                const selectedFields = document.getElementById(this.id + '-fields');
+                if (selectedFields) {
+                    selectedFields.classList.remove('hidden');
+                }
+            });
+        });
+
+        // Register form submission
+        document.querySelector('#register-modal button[type="button"]').addEventListener('click', function() {
+            // Validate form
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+            const terms = document.getElementById('terms').checked;
+            
+            if (!email || !password || !confirmPassword) {
+                alert('Proszę wypełnić wszystkie pola formularza.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('Hasła nie są identyczne.');
+                return;
+            }
+            
+            if (!terms) {
+                alert('Proszę zaakceptować warunki korzystania z usługi.');
+                return;
+            }
+            
+            // Close register modal and open payment modal
+            closeModal('register-modal');
+            openModal('payment-modal');
+        });
+
+        // API configuration
+        const API_CONFIG = {
+            allegro: {
+                url: 'https://api.allegro.pl/offers/listing',
+                headers: {
+                    'Accept': 'application/vnd.allegro.public.v1+json',
+                    'Authorization': 'Bearer YOUR_ALLEGRO_ACCESS_TOKEN'
+                }
+            },
+            olx: {
+                url: 'https://www.olx.pl/api/v1/offers/',
+                params: {
+                    limit: 10,
+                    offset: 0
+                }
+            }
+        };
+
+        // Search products function
+        async function searchProducts(query) {
+            try {
+                // Show loading state
+                const searchBtn = document.querySelector('#search + div button');
+                searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                searchBtn.disabled = true;
+
+                // Search in parallel
+                const [allegroResults, olxResults] = await Promise.all([
+                    searchAllegro(query),
+                    searchOlx(query)
+                ]);
+
+                // Combine and display results
+                displayResults([...allegroResults, ...olxResults]);
+                
+            } catch (error) {
+                console.error('Search error:', error);
+                alert('Wystąpił błąd podczas wyszukiwania. Spróbuj ponownie.');
+            } finally {
+                // Reset button
+                const searchBtn = document.querySelector('#search + div button');
+                searchBtn.innerHTML = 'Sprawdź ofertę';
+                searchBtn.disabled = false;
+            }
+        }
+
+        // Allegro API search
+        async function searchAllegro(query) {
+            try {
+                const params = new URLSearchParams({
+                    phrase: query,
+                    limit: 5
+                });
+                
+                const response = await fetch(`${API_CONFIG.allegro.url}?${params}`, {
+                    headers: API_CONFIG.allegro.headers
+                });
+                
+                if (!response.ok) throw new Error('Allegro API error');
+                
+                const data = await response.json();
+                return data.items.map(item => ({
+                    title: item.name,
+                    price: item.sellingMode.price.amount,
+                    url: item.links.allegro,
+                    image: item.images[0]?.url,
+                    source: 'Allegro'
+                }));
+            } catch (error) {
+                console.error('Allegro search error:', error);
+                return [];
+            }
+        }
+
+        // OLX API search (mock - OLX doesn't have public API)
+        async function searchOlx(query) {
+            try {
+                // In a real app, you would use a proxy server to scrape OLX
+                // This is just a mock implementation
+                const mockResults = [{
+                    title: `${query} na OLX`,
+                    price: '99.99',
+                    url: `https://www.olx.pl/q/${encodeURIComponent(query)}/`,
+                    image: 'https://via.placeholder.com/150',
+                    source: 'OLX'
+                }];
+                
+                return mockResults;
+            } catch (error) {
+                console.error('OLX search error:', error);
+                return [];
+            }
+        }
+
+        // Display results
+        function displayResults(products) {
+            const resultsContainer = document.getElementById('search-results');
+            if (!resultsContainer) {
+                // Create results container if it doesn't exist
+                const container = document.createElement('div');
+                container.id = 'search-results';
+                container.className = 'mt-8 bg-white shadow rounded-lg overflow-hidden';
+                container.innerHTML = `
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h2 class="text-lg font-medium text-gray-900">Wyniki wyszukiwania</h2>
+                    </div>
+                    <div class="divide-y divide-gray-200" id="results-list"></div>
+                `;
+                document.querySelector('.min-h-screen').appendChild(container);
+            }
+
+            const resultsList = document.getElementById('results-list');
+            resultsList.innerHTML = '';
+
+            if (products.length === 0) {
+                resultsList.innerHTML = `
+                    <div class="px-6 py-4 text-center text-gray-500">
+                        Brak wyników wyszukiwania
+                    </div>
+                `;
+                return;
+            }
+
+            products.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'px-6 py-4 hover:bg-gray-50';
+                productElement.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-16 w-16">
+                            <img class="h-16 w-16 rounded-md" src="${product.image || 'https://via.placeholder.com/150'}" alt="${product.title}">
+                        </div>
+                        <div class="ml-4 flex-1">
+                            <h3 class="text-md font-medium text-gray-900">${product.title}</h3>
+                            <p class="text-sm text-gray-500">${product.source}</p>
+                        </div>
+                        <div class="ml-4 text-right">
+                            <p class="text-lg font-medium text-indigo-600">${product.price} PLN</p>
+                            <a href="${product.url}" target="_blank" class="text-sm text-indigo-600 hover:text-indigo-800">Zobacz ofertę</a>
+                        </div>
+                    </div>
+                `;
+                resultsList.appendChild(productElement);
+            });
+        }
+
+        // Search functionality
+        document.querySelector('#search + div button').addEventListener('click', function() {
+            const query = document.getElementById('search').value.trim();
+            if (query) {
+                searchProducts(query);
+            } else {
+                alert('Proszę wprowadzić frazę wyszukiwania.');
+            }
+        });
+    </script>
+
+<script>
+window.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("searchButton");
+    const input = document.getElementById("searchInput");
+    const results = document.getElementById("results");
+
+    if (!button || !input || !results) return;
+
+    button.addEventListener("click", async () => {
+        const query = input.value.trim();
+        if (!query) return;
+        results.innerHTML = "⏳ Szukam...";
+        try {
+            const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            if (!data.results || data.results.length === 0) {
+                results.innerHTML = "Brak wyników.";
+                return;
+            }
+            results.innerHTML = data.results.map(item => 
+                `<div class='result-item'>
+                    <a href='${item.link}' target='_blank'><strong>${item.title}</strong></a><br>${item.price}
+                </div>`
+            ).join("<hr>");
+        } catch (err) {
+            results.innerHTML = "❌ Wystąpił błąd podczas wyszukiwania.";
+            console.error(err);
+        }
+    });
+});
+</script>
+
+</body>
+</html>
